@@ -1,3 +1,4 @@
+const infoButton = document.getElementById("info-button");
 const startButton = document.getElementById("start-button");
 const scoreCounter = document.getElementById("score");
 const icons = ['chicken', 'cow', 'pig', 'sheep'];
@@ -12,7 +13,7 @@ let highScore = 0;
 $(".image").click(function(playerClicked) {
     click++;
     let icon = playerClicked.target.id;
-    /*playSound(icon);*/
+    playSound(icon);
     checkSequence(icon);
 });
 
@@ -27,7 +28,7 @@ function checkSequence(icon) {
             }, 1500); 
         }
     }else {
-        alert("GAME OVER, click start to try again");
+        alert("Game Over, click start to try again.");
             playerSequence = [];
             sequence = [];
             if (score > highScore) {
@@ -48,22 +49,25 @@ startButton.addEventListener('click', (e) => {
     }
 });
 
-/*This function generates a new icon and inserts it into the sequence */
+infoButton.addEventListener('click', (e) => {
+    alert("Test your memory skills by listening and watching, each round will add a new sound to the sequence. Repeat the sequence and try to beat your high score! Click Start to play.")
+});
+/*This function generates a new icon and inserts it into the sequence, increments the score and plays a sound corresponding to the newIcon */
 function newSequence() {
     score++;
     $("#score").text(score);
 
     let newIcon = icons[Math.floor(Math.random() * icons.length)];
     sequence.push(newIcon);
-    /*playSound(newIcon);*/
+    playSound(newIcon);
     showSequence(newIcon);
 };
 
-/*function playSound(newIcon) {
-    let sound = `assets/audio/${newIcon}.mp3`;
+function playSound(newIcon) {
+    let sound = `assets/audio/${newIcon}.m4a`;
     let audio = new Audio(sound);
     audio.play();
-} */
+} 
 
 /*This function gets the element id corresponding to the randomly generated icon name 
 and adds CSS styling to it*/
@@ -75,6 +79,7 @@ function showSequence(newIcon) {
     }, 350);
 };
 
+/* Adds event listener to images and stores chosen icon in an array */
 function playerTurn() {
     for (let image of document.getElementsByClassName("image")) {
         let listener = image.addEventListener('click', (e) => {
