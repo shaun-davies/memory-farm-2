@@ -1,56 +1,88 @@
 const startButton = document.getElementById("start-button");
 const scoreCounter = document.getElementById("score");
-const highScore = document.getElementById("high-score");
-const image = document.getElementsByClassName("image");
-
 const icons = ['chicken', 'cow', 'pig', 'sheep'];
 
 let sequence = [];
 let playerSequence = [];
-let round = 0;
+let click = -1;
+let score = 0;
+let highScore = 0;
 
-startButton.addEventListener('click', (e) => {
-    alert("You clicked start");
-    scoreCounter.innerText = "0";
-    newSequence();
+
+$(".image").click(function(playerClicked) {
+    click++;
+    let icon = playerClicked.target.id;
+    /*playSound(icon);*/
+    checkSequence(icon);
 });
 
+function checkSequence(icon) {
+    playerSequence.push(icon);
+    if(icon == sequence[click]) {
+        if(playerSequence.length == sequence.length) {
+            setTimeout(function() {
+                playerSequence = [];
+                click = -1;
+                newSequence();
+            }, 1500); 
+        }
+    }else {
+        alert("GAME OVER, click start to try again");
+            playerSequence = [];
+            sequence = [];
+            if (score > highScore) {
+                highScore = score;
+                $("#high-score").text(score);
+            }
+            score = 0;
+            click = -1;
+    }
+}
 
+startButton.addEventListener('click', (e) => {
+    scoreCounter.innerText = "0";
+    sequence = [];
+    playerSequence = [];
+    if(score <= 0) {
+    newSequence();
+    }
+});
 
-function newSequence () {
-    round += 1;
-    let sequence = [];
+/*This function generates a new icon and inserts it into the sequence */
+function newSequence() {
+    score++;
+    $("#score").text(score);
+
     let newIcon = icons[Math.floor(Math.random() * icons.length)];
     sequence.push(newIcon);
-    console.log(sequence);
+    /*playSound(newIcon);*/
     showSequence(newIcon);
-}
+};
 
+/*function playSound(newIcon) {
+    let sound = `assets/audio/${newIcon}.mp3`;
+    let audio = new Audio(sound);
+    audio.play();
+} */
+
+/*This function gets the element id corresponding to the randomly generated icon name 
+and adds CSS styling to it*/
 function showSequence(newIcon) {
     console.log(newIcon);
-    document.getElementById("$(newIcon)").classList.add("zoom");
-    
-    
-    /*if newIcon == "sheep" {
-        document.getElementById('sheep').classList.add('zoom');
-    }
-    /*if sequence.includes('sheep') {
-        document.getElementById('sheep').classList.add('zoom');
-    }
-    
-    /*if sequence === ["sheep"] {
-        document.getElementById("sheep").classList.add("zoom");
-    }
-    
-    /* iterate through sequence array and add css */
-    /* then playerTurn() */
-}
-
+    document.getElementById(newIcon).classList.add("zoom");
+    setTimeout(function () {
+        document.getElementById(newIcon).classList.remove("zoom");
+    }, 350);
+};
 
 function playerTurn() {
-/* adds event listener to icons */
-/* test if player sequence matches sequence */
-/* if matches score and high score+1
+    for (let image of document.getElementsByClassName("image")) {
+        let listener = image.addEventListener('click', (e) => {
+            let playerClick = e.target.getAttribute("id");
+            playerSequence.push(playerClick);
+            console.log(playerSequence);
+            sequenceTest();
+        });
+    };
 
-*/
-}
+};
