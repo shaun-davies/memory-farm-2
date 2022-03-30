@@ -28,7 +28,7 @@ function checkSequence(icon) {
             }, 1500); 
         }
     }else {
-        alert("Game Over, click start to try again.");
+        alert("Game Over, click Start to try again.");
             playerSequence = [];
             sequence = [];
             if (score > highScore) {
